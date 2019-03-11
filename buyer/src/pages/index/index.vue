@@ -1,15 +1,15 @@
 <template >
 <view class="container">
   <swiper class="banner" indicator-dots="true" autoplay="true" interval="3000" duration="1000">
-    <swiper-item v-for="item of banner" :key="item.id">
-      <navigator :url="item.link">
-        <img :src="item.image_url" background-size="cover" />
+    <swiper-item v-for="item of advertiseList" :key="item.id">
+      <navigator :url="item.url">
+        <img :src="item.pic" background-size="cover" />
       </navigator>
     </swiper-item>
   </swiper>
   <view class="m-menu">
-    <navigator  class="item" :url="item.url" v-for="item of channel" :key="item.id">
-      <img :src="item.icon_url" background-size="cover" />
+    <navigator  class="item" :url="item.url" v-for="item of productCategoryList" :key="item.id">
+      <img :src="item.icon" background-size="cover" />
       <text>{{item.name}}</text>
     </navigator>
   </view>
@@ -20,13 +20,13 @@
       </navigator>
     </view>
     <view class="b">
-      <view class="item item-1" v-for="item of brands" :key="item.id">
+      <view class="item item-1" v-for="item of brandList" :key="item.id">
         <navigator :url="'/pages/brand/brandDetail?id='+item.id">
           <view class="wrap">
-            <img class="img" :src="item.new_pic_url" mode="aspectFill" />
+            <img class="img" :src="item.logo" mode="aspectFill" />
             <view class="mt">
               <text class="brand">{{item.name}}</text>
-              <text class="price">{{item.floor_price}}</text>
+              <text class="price">66</text>
               <text class="unit">元起</text>
             </view>
           </view>
@@ -34,25 +34,26 @@
       </view>
     </view>
   </view>
-  <view class="a-section a-new" v-if="newGoods.length">
+  <view class="a-section a-new" v-if="newProductList.length">
+    
     <view class="h">
       <view>
         <navigator url="../newGoods/newGoods">
-          <text class="txt">周一周四 · 新品首发</text>
+          <text class="txt">new · 新品首发</text>
         </navigator>
       </view>
     </view>
     <view class="b">
-      <view class="item" v-for="item of newGoods" :key="item.id">
+      <view class="item" v-for="item of newProductList" :key="item.id">
         <navigator :url="'../goods/goods?id='+ item.id">
-          <img class="img" :src="item.list_pic_url" background-size="cover" />
+          <img class="img" :src="item.pic" background-size="cover" />
           <text class="name">{{item.name}}</text>
-          <text class="price">￥{{item.retail_price}}</text>
+          <text class="price">￥{{item.price}}</text>
         </navigator>
       </view>
     </view>
   </view>
-  <view class="a-section a-popular" v-if="hotGoods.length">
+  <!-- <view class="a-section a-popular" v-if="hotGoods.length">
     <view class="h">
       <view>
         <navigator url="../hotGoods/hotGoods">
@@ -121,7 +122,7 @@
           </navigator>
       </view>
     </view>
-  </view>
+  </view> -->
 </view>
 </template>
 
@@ -132,13 +133,13 @@ import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'newGoods',
+      'newProductList',
       'hotGoods',
       'topics',
-      'brands',
+      'brandList',
       'floorGoods',
-      'banner',
-      'channel'
+      'advertiseList',
+      'productCategoryList'
     ])
   },
   async mounted () {

@@ -1,10 +1,10 @@
 import request from './request'
 
-const ApiRootUrl = 'http://127.0.0.1:8360/api/'
+const ApiRootUrl = 'http://127.0.0.1:8085/'
 
 const api = {
   // 首页数据接口
-  getIndexData: (r) => request.get('index/index', null, {
+  getIndexData: (r) => request.get('home/content', null, {
     baseURL: ApiRootUrl
   }),
   // 分类目录全部分类数据接口
