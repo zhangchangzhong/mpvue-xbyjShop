@@ -21,12 +21,12 @@
               <img class="img" :src="item.list_pic_url"/>
               <view class="info">
                 <view class="t">
-                  <text class="name">{{item.goods_name}}</text>
-                  <text class="num">x{{item.number}}</text>
+                  <text class="name">{{item.productName}}</text>
+                  <text class="num">x{{item.quantity}}</text>
                 </view>
                 <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.goods_specifition_name_value}}</view>
                 <view class="b">
-                  <text class="price">￥{{item.retail_price}}</text>
+                  <text class="price">￥{{item.price}}</text>
                   <view class="selnum">
                     <view class="cut" @click="cutNumber" :data-item-index="index">-</view>
                     <input :value="item.number" class="number" disabled="true" type="number" />
@@ -107,9 +107,9 @@ export default {
     async getCartList () {
       const res = await api.getCartList();
       // console.log('购物车数据,请求结果', res);
-      if (res.errno === 0) {
-        this.cartGoods = res.data.cartList;
-        this.cartTotal = res.data.cartTotal;
+      if (res.code === 200) {
+        this.cartGoods = res.data;
+        this.cartTotal = 5;
       }
       this.checkedAllStatus = this.isCheckedAll();
     },

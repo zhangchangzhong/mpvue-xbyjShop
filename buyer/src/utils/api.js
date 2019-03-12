@@ -64,7 +64,7 @@ const api = {
     baseURL: ApiRootUrl
   }),
   // 获取购物车的数据
-  getCartList: (r) => request.get('cart/index', null, {
+  getCartList: (r) => request.get('cart/list', null, {
     baseURL: ApiRootUrl
   }),
   // 添加商品到购物车
