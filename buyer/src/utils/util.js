@@ -44,7 +44,7 @@ function request (url, data = {}, method = 'GET') {
                 code: code,
                 userInfo: userInfo
               }, 'POST').then(res => {
-                if (res.errno === 0) {
+                if (res.code === 200) {
                   // 存储用户信息
                   wx.setStorageSync('userInfo', res.data.userInfo);
                   wx.setStorageSync('token', res.data.token);

@@ -1,8 +1,8 @@
 <template >
 <view class="container">
   <view class="profile-info">
-    <view v-if="userInfo.avatar">
-      <img class="avatar" :src="userInfo.avatar"/>
+    <view v-if="userInfo.nickname">
+      <!-- <img class="avatar" :src="userInfo.avatar"/> -->
       <view class="info">
         <text class="name">{{userInfo.nickname}}</text>
       </view>
@@ -87,7 +87,7 @@
       </navigator>
     </view>
   </view>
-  <view v-if="userInfo.avatar" class="logout" @click="exitLogin">退出登录</view>
+  <view v-if="userInfo.nickname" class="logout" @click="exitLogin">退出登录</view>
 </view>
 </template>
 

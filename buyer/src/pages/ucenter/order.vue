@@ -1,7 +1,7 @@
 <template >
 <view class="container">
     <view class="orders">
-        <navigator :url="'./orderDetail?id=' + item.id" class="order" v-for="(item, index) of orderList" :key="item.id" :data-index="index">
+        <!-- <navigator :url="'./orderDetail?id=' + item.id" class="order" v-for="(item, index) of orderList" :key="item.id" :data-index="index">
             <view class="h">
                 <view class="l">订单编号：{{item.order_sn}}</view>
                 <view class="r">{{item.order_status_text}}</view>
@@ -20,6 +20,50 @@
                 <view class="l">实付：￥{{item.actual_price}}</view>
                 <view class="r">
                     <button class="btn" :data-order-index="index" @click="payOrder" v-if="item.handleOption.pay">去付款</button>
+                </view>
+            </view>
+        </navigator> -->
+         <navigator :url="'./orderDetail?id=' + 1" class="order"  :key="1" :data-index="index">
+            <view class="h">
+                <view class="l">订单编号：21321312312</view>
+                <view class="r">123123123123123</view>
+            </view>
+            <view class="goods" :key="1" :data-index="iindex">
+                <view class="img">
+            
+                </view>
+                <view class="info">
+                    <text class="name">阿萨德</text>
+                    <text class="number">共2件商品</text>
+                </view>
+                <view class="status"></view>
+            </view>
+            <view class="b">
+                <view class="l">实付：￥11</view>
+                <view class="r">
+                    <button class="btn" :data-order-index="index" @click="payOrder" >去付款</button>
+                </view>
+            </view>
+        </navigator>
+        <navigator :url="'./orderDetail?id=' + 1" class="order"  :key="1" :data-index="index">
+            <view class="h">
+                <view class="l">订单编号：213212312</view>
+                <view class="r">3333123123123</view>
+            </view>
+            <view class="goods" :key="1" :data-index="iindex">
+                <view class="img">
+            
+                </view>
+                <view class="info">
+                    <text class="name">顶顶顶顶顶</text>
+                    <text class="number">共1件商品</text>
+                </view>
+                <view class="status"></view>
+            </view>
+            <view class="b">
+                <view class="l">实付：￥112</view>
+                <view class="r">
+                    <button class="btn" :data-order-index="index" @click="payOrder" >取消订单</button>
                 </view>
             </view>
         </navigator>

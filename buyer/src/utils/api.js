@@ -1,10 +1,13 @@
 import request from './request'
 
-const ApiRootUrl = 'http://127.0.0.1:8360/api/'
-
+// const ApiRootUrl = 'http://127.0.0.1:8360/api/'
+const ApiRootUrl = 'http://127.0.0.1:8085/'
 const api = {
   // 首页数据接口
-  getIndexData: (r) => request.get('index/index', null, {
+  // getIndexData: (r) => request.get('index/index', null, {
+  //   baseURL: ApiRootUrl
+  // }),
+  getIndexData: (r) => request.get('home/content', null, {
     baseURL: ApiRootUrl
   }),
   // 分类目录全部分类数据接口
@@ -17,7 +20,7 @@ const api = {
   }),
   // 使用util的request方法，字符串变量即可
   // 微信登录
-  AuthLoginByWeixin: ApiRootUrl + 'auth/loginByWeixin',
+  AuthLoginByWeixin: ApiRootUrl + 'sso/login',
   // 获取微信统一下单prepay_id
   PayPrepayId: ApiRootUrl + 'pay/prepay',
   // （pay单独使用）获取微信统一下单prepay_id
