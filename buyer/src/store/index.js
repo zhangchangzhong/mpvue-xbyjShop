@@ -7,30 +7,30 @@ Vue.use(Vuex)
 const store = new Vuex.Store({
   state: {
     // 首页数据
-    newGoods: [],
+    newProductList: [],
     hotGoods: [],
     topics: [],
-    brands: [],
+    brandList: [],
     floorGoods: [],
-    banner: [],
-    channel: []
+    advertiseList: [],
+    productCategoryList: []
   },
   mutations: {
     getIndexData (state, res) {
-      state.newGoods = res.data.newGoodsList;
+      state.newProductList = res.data.newProductList;
       state.hotGoods = res.data.hotGoodsList;
       state.topics = res.data.topicList;
-      state.brands = res.data.brandList;
+      state.brandList = res.data.brandList;
       state.floorGoods = res.data.categoryList;
-      state.banner = res.data.banner;
-      state.channel = res.data.channel;
+      state.advertiseList = res.data.advertiseList;
+      state.productCategoryList = res.data.productCategoryList;
     }
   },
   actions: {
     async getIndexData ({ commit }) {
       const res = await api.getIndexData()
-      // console.log('vuex取首页的数据getIndexData', res)
-      if (res.errno !== 0) return
+      console.log('vuex取首页的数据getIndexData', res)
+      if (res.code !== 200) return
       commit('getIndexData', res)
     }
   }
