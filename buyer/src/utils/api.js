@@ -88,7 +88,7 @@ const api = {
     baseURL: ApiRootUrl
   }),
   // 下单前信息确认
-  CartCheckout: (paramObj) => request.get('cart/checkout', paramObj, {
+  CartCheckout: (paramObj) => request.post('order/generateConfirmOrder', paramObj, {
     baseURL: ApiRootUrl
   }),
   // 提交订单

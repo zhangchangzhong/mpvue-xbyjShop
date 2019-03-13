@@ -18,18 +18,18 @@
           <view :class="isEditCart ? 'edit item' : 'item'" v-for="(item, index) of cartGoods" :key="item.id">
             <view :class="item.checked ? 'checked checkbox' : 'checkbox'" @click="checkedItem" :data-item-index="index"></view>
             <view class="cart-goods">
-              <img class="img" :src="item.list_pic_url"/>
+              <img class="img" :src="item.productPic"/>
               <view class="info">
                 <view class="t">
                   <text class="name">{{item.productName}}</text>
                   <text class="num">x{{item.quantity}}</text>
                 </view>
-                <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.goods_specifition_name_value}}</view>
+                <view class="attr">{{ isEditCart ? '已选择:' : ''}}{{item.sp1}}</view>
                 <view class="b">
                   <text class="price">￥{{item.price}}</text>
                   <view class="selnum">
                     <view class="cut" @click="cutNumber" :data-item-index="index">-</view>
-                    <input :value="item.number" class="number" disabled="true" type="number" />
+                    <input :value="item.quantity" class="number" disabled="true" type="number" />
                     <view class="add" @click="addNumber" :data-item-index="index">+</view>
                   </view>
                 </view>
@@ -38,7 +38,7 @@
           </view>
         </view>
       </view>
-      <view class="group-item">
+      <!-- <view class="group-item">
           <view class="header">
               <view class="promotion">
                   <text class="tag">满赠</text>
@@ -66,7 +66,7 @@
                   </view>
               </view>
           </view>
-      </view>
+      </view> -->
     </view>
     <view class="cart-bottom">
       <view :class="checkedAllStatus ? 'checked checkbox' : 'checkbox'" @click="checkedAll">全选({{cartTotal.checkedGoodsCount}})</view>
@@ -109,14 +109,13 @@ export default {
       // console.log('购物车数据,请求结果', res);
       if (res.code === 200) {
         this.cartGoods = res.data;
-        this.cartTotal = 5;
       }
       this.checkedAllStatus = this.isCheckedAll();
     },
     // 判断购物车是否全选
     isCheckedAll () {
       return this.cartGoods.every(function (element, index, array) {
-        if (element.checked === 1) {
+        if (element.checked === true) {
           return true;
         } else {
           return false;
@@ -128,13 +127,10 @@ export default {
       let itemIndex = event.currentTarget.dataset.itemIndex;
       // 非编辑状态，发请求后台node进行计算
       if (!this.isEditCart) {
-        const res = await api.CartChecked({ productIds: this.cartGoods[itemIndex].product_id, isChecked: this.cartGoods[itemIndex].checked ? 0 : 1 });
-        // console.log('点击checkbox后台重新计算,请求结果', res);
-        if (res.errno === 0) {
-          this.cartGoods = res.data.cartList;
-          this.cartTotal = res.data.cartTotal;
-        }
+        this.cartGoods[itemIndex].checked = !this.cartGoods[itemIndex].checked;
         this.checkedAllStatus = this.isCheckedAll();
+        this.cartTotal.checkedGoodsAmount = this.getCheckedGoodsAmount();
+        this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount();
       } else {
         // 编辑状态，前端进行简单计算
         let tmpCartData = this.cartGoods.map(function (element, index, array) {
@@ -153,26 +149,35 @@ export default {
       let checkedGoodsCount = 0;
       this.cartGoods.forEach(function (v) {
         if (v.checked === true) {
-          checkedGoodsCount += v.number;
+          checkedGoodsCount += v.quantity;
         }
       });
       // console.log('选中的商品数量', checkedGoodsCount);
       return checkedGoodsCount;
     },
+    // 计算选中的商品价格
+    getCheckedGoodsAmount () {
+      let checkedGoodsAmount = 0;
+      this.cartGoods.forEach(function (v) {
+        if (v.checked === true) {
+          checkedGoodsAmount += v.quantity * v.price;
+        }
+      });
+      return checkedGoodsAmount;
+    },
     // 点击底部的“全选”
     async checkedAll () {
       // 非编辑状态，请求后台计算
       if (!this.isEditCart) {
-        var productIds = this.cartGoods.map(function (v) {
-          return v.product_id;
+        let checkedAllStatus = this.isCheckedAll();
+        let tmpCartData = this.cartGoods.map(function (v) {
+          v.checked = !checkedAllStatus;
+          return v;
         });
-        const res = await api.CartChecked({ productIds: productIds.join(','), isChecked: this.isCheckedAll() ? 0 : 1 });
-        // console.log('点击全选,请求结果', res);
-        if (res.errno === 0) {
-          this.cartGoods = res.data.cartList;
-          this.cartTotal = res.data.cartTotal;
-        }
+        this.cartGoods = tmpCartData;
         this.checkedAllStatus = this.isCheckedAll();
+        this.cartTotal.checkedGoodsAmount = this.getCheckedGoodsAmount();
+        this.cartTotal.checkedGoodsCount = this.getCheckedGoodsCount();
         // console.log('检查是否全选', this.checkedAllStatus);
       } else {
         // 编辑状态，前端进行简单计算
@@ -242,7 +247,7 @@ export default {
     checkoutOrder () {
       // 获取已选择的商品
       var checkedGoods = this.cartGoods.filter(function (element, index, array) {
-        if (element.checked === 1) {
+        if (element.checked === true) {
           return true;
         } else {
           return false;

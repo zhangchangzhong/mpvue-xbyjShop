@@ -66,15 +66,15 @@
     <view class="goods-items">
         <view class="item" v-for="(item, index) of checkedGoodsList" :key="item.id" :data-index="index">
             <view class="img">
-                <image :src="item.list_pic_url"/>
+                <image :src="item.productPic"/>
             </view>
             <view class="info">
                 <view class="t">
-                    <text class="name">{{item.goods_name}}</text>
-                    <text class="number">x{{item.number}}</text>
+                    <text class="name">{{item.productName}}</text>
+                    <text class="number">x{{item.quantity}}</text>
                 </view>
-                <view class="m">{{item.goods_specifition_name_value}}</view>
-                <view class="b">￥{{item.retail_price}}</view>
+                <view class="m">{{item.sp1}}</view>
+                <view class="b">￥{{item.price}}</view>
             </view>
         </view>
     </view>
@@ -132,12 +132,12 @@ export default {
     async getCheckoutInfo () {
       const res = await api.CartCheckout({ addressId: this.addressId, couponId: this.couponId });
       // console.log('订单详情,请求结果', res);
-      if (res.errno === 0) {
-        this.checkedGoodsList = res.data.checkedGoodsList;
-        this.checkedAddress = res.data.checkedAddress;
-        this.actualPrice = res.data.actualPrice;
+      if (res.code === 200) {
+        this.checkedGoodsList = res.data.cartPromotionItemList;
+        this.checkedAddress = res.data.memberReceiveAddressList;
+        this.actualPrice = res.data.calcAmount.payAmount;
         this.checkedCoupon = res.data.checkedCoupon;
-        this.couponList = res.data.couponList;
+        this.couponList = res.data.couponHistoryDetailList;
         this.couponPrice = res.data.couponPrice;
         this.freightPrice = res.data.freightPrice;
         this.goodsTotalPrice = res.data.goodsTotalPrice;
