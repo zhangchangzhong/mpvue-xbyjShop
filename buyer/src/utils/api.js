@@ -92,7 +92,7 @@ const api = {
     baseURL: ApiRootUrl
   }),
   // 提交订单
-  OrderSubmit: (paramObj) => request.post('order/submit', paramObj, {
+  OrderSubmit: (paramObj) => request.post('order/generateOrder', paramObj, {
     baseURL: ApiRootUrl
   }),
   // 收藏列表

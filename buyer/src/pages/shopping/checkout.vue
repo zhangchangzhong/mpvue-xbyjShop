@@ -4,11 +4,11 @@
         <view class="address-item" @click="selectAddress" v-if="checkedAddress.id > 0">
             <view class="l">
                 <text class="name">{{checkedAddress.name}}</text>
-                <text class="default" v-if="checkedAddress.is_default === 1">默认</text>
+                <text class="default" v-if="checkedAddress.defaultStatus === 1">默认</text>
             </view>
             <view class="m">
-                <text class="mobile">{{checkedAddress.mobile}}</text>
-                <text class="address">{{checkedAddress.full_region + checkedAddress.address}}</text>
+                <text class="mobile">{{checkedAddress.phoneNumber}}</text>
+                <text class="address">{{checkedAddress.province + checkedAddress.city + checkedAddress.region + checkedAddress.detailAddress}}</text>
             </view>
             <view class="r">
                 <image src="/static/images/address_right.png"/>
@@ -24,7 +24,7 @@
         </view>
     </view>
 
-    <view class="coupon-box">
+    <!-- <view class="coupon-box">
         <view class="coupon-item">
             <view class="l">
                 <text class="name">请选择优惠券</text>
@@ -34,7 +34,7 @@
                 <image src="/static/images/address_right.png"/>
             </view>
         </view>
-    </view>
+    </view> -->
 
     <view class="order-box">
         <view class="order-item">
@@ -45,7 +45,7 @@
                 <text class="txt">￥{{goodsTotalPrice}}</text>
             </view>
         </view>
-        <view class="order-item">
+        <!-- <view class="order-item">
             <view class="l">
                 <text class="name">运费</text>
             </view>
@@ -60,7 +60,7 @@
             <view class="r">
                 <text class="txt">-￥{{couponPrice}}</text>
             </view>
-        </view>
+        </view> -->
     </view>
 
     <view class="goods-items">
@@ -134,15 +134,29 @@ export default {
       // console.log('订单详情,请求结果', res);
       if (res.code === 200) {
         this.checkedGoodsList = res.data.cartPromotionItemList;
-        this.checkedAddress = res.data.memberReceiveAddressList;
+        this.checkedAddress = this.selectDefaultAddress(res.data.memberReceiveAddressList);
+        console.log(this.checkedAddress);
         this.actualPrice = res.data.calcAmount.payAmount;
         this.checkedCoupon = res.data.checkedCoupon;
-        this.couponList = res.data.couponHistoryDetailList;
-        this.couponPrice = res.data.couponPrice;
-        this.freightPrice = res.data.freightPrice;
-        this.goodsTotalPrice = res.data.goodsTotalPrice;
-        this.orderTotalPrice = res.data.orderTotalPrice;
+        // this.couponList = res.data.couponHistoryDetailList;
+        // this.couponPrice = res.data.couponPrice;
+        // this.freightPrice = res.data.freightPrice;
+        this.goodsTotalPrice = res.data.calcAmount.totalAmount;
+        // this.orderTotalPrice = res.data.orderTotalPrice;
       }
+    },
+    // 选择默认收获地址
+    selectDefaultAddress (adressList) {
+      let address = {};
+      let addressId = this.addressId;
+      adressList.filter(function (element, index, array) {
+        if (element.defaultStatus === 1) {
+          address = element;
+          addressId = element.id;
+        }
+      });
+      this.addressId = addressId;
+      return address
     },
     // 选择收获地址
     selectAddress () {
@@ -163,7 +177,7 @@ export default {
         return false;
       }
       // 请求后台，更新数据库的order表，清空购物车表等
-      const res = await api.OrderSubmit({ addressId: this.addressId, couponId: this.couponId });
+      const res = await api.OrderSubmit({ memberReceiveAddressId: this.addressId, couponId: null });
       // console.log('提交订单,请求结果', res);
       // 数据库操作成功，再调用wx的支付服务
       if (res.errno === 0) {
